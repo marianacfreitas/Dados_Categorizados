@@ -1,0 +1,66 @@
+---
+title: "Relatório de Dengue em Bangladesh"
+author: "MarianaFreitas e Aline Pires"
+date: " "
+output: pdf_document
+---
+
+# Introdução
+
+# Metodologia
+
+## Tabelas de Contigência
+ 
+ + Avaliação em testes diagnósticos: sensibilidade, especificidade, decisões incorretas, curva ROC
++ Tipo de estudo + delineamento amostral
++ Diferença de proporções em tabelas 2x2
++ Razão de chances (risco relativo não, apenas para coorte)
++ Inferência e log das razões de chance
++ Intervalos de confiança para razão de chances
+
+## Medidas de associação
++ Teste de independência
++ Independência condicional versus independência marginal
++ Teste de homogeneidade
++ Teste de homogeneidade marginal
++ Teste de simetria
++ Associações condicionais versus marginais
++ Paradoxo de Simpson
++ Razões de chance condicional e marginal
+
+## Modelagem
++ Regressão logística
++ Modelos log-lineares
+
+# Resultados
+
+## Análise Descritiva
+
+### Sobre os Dados
+
+### Tratamento dos dados
+
+### Análise exploratória
+
+## Análises e testes para tabela de contigência
++ Avaliação em testes diagnósticos: sensibilidade, especificidade, decisões incorretas, curva ROC
++ Tipo de estudo + delineamento amostral
++ Diferença de proporções em tabelas 2x2
++ Razão de chances (risco relativo não, apenas para coorte)
++ Inferência e log das razões de chance
++ Intervalos de confiança para razão de chances
++ Teste de independência
++ Independência condicional versus independência marginal
++ Teste de homogeneidade
++ Teste de homogeneidade marginal
++ Teste de simetria
++ Associações condicionais versus marginais
++ Paradoxo de Simpson
++ Razões de chance condicional e marginal
+
+## Modelagem
++ Regressão logística
++ Modelos log-lineares
++ Comparação da performance por análise de resíduos
+
+# Conclusão
