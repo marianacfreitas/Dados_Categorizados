@@ -1,0 +1,54 @@
+---
+title: "Relatório de Promoção de Funcionários"
+author: "MarianaFreitas e Aline Pires"
+date: " "
+output: pdf_document
+---
+
+# Introdução
+
+# Metodologia
+
+## Tabelas de Contigência
+
++ Independência
++ Tipo de estudo + delineamento amostral
++ Diferença de proporções em tabelas 2x2
++ Razão de chances (risco relativo não, apenas para coorte)
+
+## Inferência para tabelas de contigência
+ + Teste qui-quadrado para independência
+ 
+## Medidas de associação
++ Teste de independência
++ Teste de homogeneidade
+
+## Modelagem
++ Regressão logística
++ Modelos log-lineares
+
+# Resultados
+
+## Análise Descritiva
+
+### Sobre os Dados
+
+### Tratamento dos dados
+
+### Análise exploratória
+
+## Análises e testes para tabela de contigência
++ Independência
++ Tipo de estudo + delineamento amostral
++ Diferença de proporções em tabelas 2x2
++ Razão de chances (risco relativo não, apenas para coorte)
+ + Teste qui-quadrado para independência
+ + Teste de independência
++ Teste de homogeneidade
+
+## Modelagem
++ Regressão logística
++ Modelos log-lineares
++ Comparação da performance por análise de resíduos
+
+# Conclusão

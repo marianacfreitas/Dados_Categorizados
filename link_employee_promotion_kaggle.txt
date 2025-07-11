@@ -1,0 +1,2 @@
+LINK PARA A BASE DE DADOS NO KAGGLE COM DESCRIÇÃO DAS VARIÁVEIS:
+https://www.kaggle.com/datasets/arashnic/hr-ana
