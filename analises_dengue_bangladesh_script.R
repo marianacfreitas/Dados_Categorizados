@@ -49,6 +49,8 @@ dados <- dados |>
     Outcome = factor(Outcome)
   )
 
+write.csv(dados, "dados_tratados.csv")
+
 #--------------- Análise de teste diagnósticos -----------------------
 # A função confusionMatrix retorna:
 # Tabela teste x resultado real
