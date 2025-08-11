@@ -193,15 +193,86 @@ cat("  IC 95% OR = [", round(ic_age[1], 3), ",", round(ic_age[2], 3), "]\n\n")
 
 # ------------- Modelo de Regressão Logística
 
-# Modelo com várias variáveis categóricas
-modelo_logistico <- glm(Outcome ~ ., 
-                        data = dados, family = binomial)
+##### Escolha de interações no modelo
 
-# Resumo do modelo
-summary(modelo_logistico)
+# Preparar dados (removendo IgG, que prevê perfeitamente o Outcome)
+dados_modelo <- dados |>
+  select(-c(IgG, IgM, NS1))
+
+dados_modelo$Outcome <- as.factor(dados_modelo$Outcome)
+
+# Modelo independente 
+modelo_independente <- glm(Outcome ~ Gender + Area + AreaType + HouseType + Age_less_16_years,
+                   data = dados_modelo,
+                   family = binomial)
+
+# Modelo completo com interações
+modelo_completo <- glm(
+  Outcome ~ Gender*Area*AreaType*HouseType*Age_less_16_years,
+  data = dados_modelo,
+  family = binomial
+)
+
+# Stepwise
+modelo_final <- step(
+  object = modelo_independente,
+  scope = list(lower = modelo_independente, upper = modelo_completo),
+  direction = "both",
+  trace = TRUE
+)
+
+summary(modelo_final)
+
+# Analisando como as variáveis dimunuem o desvio
+
+fit0 <-glm(Outcome ~ Gender + Area + AreaType + HouseType  + Age_less_16_years, 
+           data = dados_modelo, family = binomial)
+
+fit1 <-glm(Outcome ~ Gender*AreaType + Area + AreaType + HouseType  + Age_less_16_years, 
+           data = dados_modelo, family = binomial)
+
+fit2 <-glm(Outcome ~ Gender*Age_less_16_years + Area + AreaType + HouseType, 
+           data = dados_modelo, family = binomial)
+
+fit3 <-glm(Outcome ~ Gender + Area + HouseType  + Age_less_16_years*AreaType, 
+           data = dados_modelo, family = binomial)
+
+fit4 <-glm(Outcome ~ Gender + Area + AreaType  + Age_less_16_years*HouseType, 
+           data = dados_modelo, family = binomial)
+
+fit5 <-glm(Outcome ~  Area + AreaType + HouseType*Gender  + Age_less_16_years, 
+           data = dados_modelo, family = binomial)
+
+fit6 <-glm(Outcome ~ Gender + Area + AreaType*HouseType  + Age_less_16_years, 
+           data = dados_modelo, family = binomial)
+
+fit7 <-glm(Outcome ~ Gender*Area + AreaType + HouseType  + Age_less_16_years, 
+           data = dados_modelo, family = binomial)
+
+fit8 <-glm(Outcome ~ Gender + AreaType + HouseType  + Age_less_16_years*Area, 
+           data = dados_modelo, family = binomial)
+
+fit9 <-glm(Outcome ~ Gender + Area*AreaType + HouseType  + Age_less_16_years, 
+           data = dados_modelo, family = binomial)
+
+fit10 <-glm(Outcome ~ Gender + AreaType + HouseType*Area  + Age_less_16_years, 
+            data = dados_modelo, family = binomial)
+
+
+
+a <- anova(fit0, fit1, fit2, fit3, fit4, fit5, fit6, fit7, fit8, fit9, fit10, test = "Chisq")
+
+
+desvio <- c(deviance(fit0), deviance(fit1), deviance(fit2), deviance(fit3), deviance(fit4),
+            deviance(fit5), deviance(fit6), deviance(fit7), deviance(fit8), 
+            deviance(fit9), deviance(fit10))
+
+aic <- c(AIC(fit0), AIC(fit1), AIC(fit2), AIC(fit3), AIC(fit4),
+         AIC(fit5), AIC(fit6), AIC(fit7), AIC(fit8), AIC(fit9),
+         AIC(fit10))
+
+# Criar a estatística do teste LR 
+lr_stat <- c(NA, round(diff(a$Deviance), 3))
 
 # Odds ratios e ICs
-exp(cbind(OR = coef(modelo_logistico), confint(modelo_logistico)))
-
-
-
+exp(cbind(OR = round(coef(modelo_final), 3), round(confint(modelo_final), 3)) )

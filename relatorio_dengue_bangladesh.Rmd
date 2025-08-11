@@ -35,7 +35,7 @@ Para analisar a associação entre duas variáveis categóricas controlando por 
 
 Para tabelas de contingência com dimensões $r×s$, foram aplicados algins testes para avaliar associação e simetria. O teste qui-quadrado de Pearson foi utilizado para verificar a independência entre linhas e colunas. O teste de razão de verossimilhança, uma alternativa ao qui-quadrado, tem base no modelo de log-verossimilhança, sendo mais adequado em amostras pequenas ou quando os pressupostos de normalidade não são satisfeitos. O teste de homogeneidade foi aplicado em situações nas quais uma das variáveis representa grupos e a outra representa categorias de resposta, buscando verificar se a distribuição de respostas é homogênea entre os grupos. O teste de simetria foi utilizado em tabelas quadradas para avaliar se a frequência de observações na célula $(i,j)$ é igual a $(j, i)$, útil para dados pareados ou classificações duplas. O teste de homogeneidade marginal, também em tabelas quadradas, verificou se as distribuições marginais das linhas e colunas são idênticas, independentemente da simetria.
 
-Por fim, foi abordada a etapa de modelagem em tabelas de contigência. Foi ajustado um modelo de regressão logística, permitindo estimar a probabilidade de doença como função das variáveis explicativas categóricas. Os coeficientes do modelo foram interpretados em termos do log das razões de chance. Pela base de dados desse trabalho se tratar de um problema com variável resposta binária, os modelos log-lineares não foram utilizados. Fio feita uma seleção do modelo de regressão logística mais adequado a partir do critério de Informação Akaike (AIC) e análise do ajuste do modelo.
+Por fim, foi abordada a etapa de modelagem em tabelas de contigência. Foi ajustado um modelo de regressão logística, permitindo estimar a chance de doença como função das variáveis explicativas categóricas. Os coeficientes do modelo foram interpretados em termos do log das razões de chance. Pela base de dados desse trabalho se tratar de um problema com variável resposta binária, os modelos log-lineares não foram utilizados. Foi feita uma seleção do modelo de regressão logística mais adequado a partir do critério de Informação Akaike (AIC) e análise do ajuste do modelo.
 
 Todas as análises foram feitas utilizando o software R, com pacotes específicos mencionados ao longo do relatório.
 
@@ -159,9 +159,236 @@ Visto que todos os intervalos de confiança para a razão de chance contém 1, p
 
 
 ## Regressão Logística
-+ Testar opções de modelos de regressão logística Mariana
-+ Selecionar baseado no AIC Mariana
-+ Interpretação do modelo Mariana
+
+A regressão logística é uma utilizada para modelar a relação entre uma variável resposta dicotômica e as variáveis explicativas. Quando as variáveis explicativas são categorizadas, elas são incluídas no modelo por meio de variáveis chamadas de *dummies*, permitindo avaliar o efeito de cada categoria em comparação a uma referência. Esse modelo estima a chance do evento de interesse ocorrer a partir do logaritmo da razão de chance, o que possibilita interpretar o impacto de cada categoria na chance do desfecho. Asim, é bastante útil em contextos onde o objetivo é compreender como diferentes categorias das variáveis influenciam a ocorrência de uma doença, no caso da dengue Possibilita também compreender a influência de interações entre as variáveis explicativas no desfecho.
+
+Nesse caso, para a modelagem não foram utilizadas as variáveis IgG, IgM e NS1, visto que os testes explicam quase por completo o desfecho, fazendo com que não seja possível os coeficientes do modelo convergirem. Todas as outras variáveis foram utilizadas.
+
+Para selecionar se seria incluída a seleção de alguma interação entre variáveis no modelo, foi utilizado o método de seleção *stepwise*, que, de forma iterativa, avalia se a remoção ou adição de interações entre variáveis acarreta em uma diminuição do AIC. O objetivo é encontrar um modelo mais simples e com bom ajuste, evitando o excesso de variáveis que não contribuem significativamente para o modelo. O AIC é uma boa métrica para alcançar essa meta, já que penaliza a complexidade do modelo para evitar problemas de  *overfitting*, mas também considera se o modelo se ajusta bem aos dados, cumprindo então o princípio da parcimônia. A seguir, é possível observar os resultados do primeiro passo do método *stepwise*. Além do AIC, há informação sobre desvio do modelo, graus de liberdade e teste de razão de verossimilhança.
+
+
+
+```{r}
+library(flextable)
+library(readr)
+library(dplyr)
+library(janitor)
+library(tidyr)
+library(maxstat)
+library(data.table)
+library(caret)
+library(PropCIs)
+dados <- read.csv("dados_tratados.csv")
+
+options(scipen = F)
+
+dados_modelo <- dados |>
+  select(-c(IgG, IgM, NS1))
+
+dados_modelo$Outcome <- as.factor(dados_modelo$Outcome)
+
+
+# Analisando como as variáveis dimunuem o desvio
+
+fit0 <-glm(Outcome ~ Gender + Area + AreaType + HouseType  + Age_less_16_years, 
+                    data = dados_modelo, family = binomial)
+
+fit1 <-glm(Outcome ~ Gender*AreaType + Area + AreaType + HouseType  + Age_less_16_years, 
+                    data = dados_modelo, family = binomial)
+
+fit2 <-glm(Outcome ~ Gender*Age_less_16_years + Area + AreaType + HouseType, 
+                    data = dados_modelo, family = binomial)
+
+fit3 <-glm(Outcome ~ Gender + Area + HouseType  + Age_less_16_years*AreaType, 
+                    data = dados_modelo, family = binomial)
+
+fit4 <-glm(Outcome ~ Gender + Area + AreaType  + Age_less_16_years*HouseType, 
+                    data = dados_modelo, family = binomial)
+
+fit5 <-glm(Outcome ~  Area + AreaType + HouseType*Gender  + Age_less_16_years, 
+                    data = dados_modelo, family = binomial)
+
+fit6 <-glm(Outcome ~ Gender + Area + AreaType*HouseType  + Age_less_16_years, 
+                    data = dados_modelo, family = binomial)
+
+fit7 <-glm(Outcome ~ Gender*Area + AreaType + HouseType  + Age_less_16_years, 
+                    data = dados_modelo, family = binomial)
+
+fit8 <-glm(Outcome ~ Gender + AreaType + HouseType  + Age_less_16_years*Area, 
+                    data = dados_modelo, family = binomial)
+
+fit9 <-glm(Outcome ~ Gender + Area*AreaType + HouseType  + Age_less_16_years, 
+                    data = dados_modelo, family = binomial)
+
+fit10 <-glm(Outcome ~ Gender + AreaType + HouseType*Area  + Age_less_16_years, 
+                    data = dados_modelo, family = binomial)
+
+
+
+a <- anova(fit0, fit1, fit2, fit3, fit4, fit5, fit6, fit7, fit8, fit9, fit10, test = "Chisq")
+
+
+desvio <- c(deviance(fit0), deviance(fit1), deviance(fit2), deviance(fit3), deviance(fit4),
+            deviance(fit5), deviance(fit6), deviance(fit7), deviance(fit8), 
+            deviance(fit9), deviance(fit10))
+
+modelo <- c("Independente", "Adição de interação Gender:AreaType",
+            "Adição de interação Gender:Age_less_16_years",
+            "Adição de interação Age_less_16_years:AreaType",
+            "Adição de interação HouseType:Age_less_16_years",
+            "Adição de interação Gender:Housetype",
+            "Adição de interação HouseType:AreaType",
+            "Adição de interação Gender:Area",
+            "Adição de interação Area:Age_less_16_years",
+            "Adição de interação Area:AreaType",
+            "Adição de interação Area:HouseType")
+
+aic <- c(AIC(fit0), AIC(fit1), AIC(fit2), AIC(fit3), AIC(fit4),
+         AIC(fit5), AIC(fit6), AIC(fit7), AIC(fit8), AIC(fit9),
+         AIC(fit10))
+
+# Criar a estatística do teste LR 
+lr_stat <- c(NA, round(diff(a$Deviance), 3))
+
+data <- data.frame(
+  Id = c(1:11),
+  Modelo = modelo,
+  Desvio = round(desvio, 2),
+  `GL` = c(959, 958, 958, 958, 957, 957, 957, 924, 925, 924, 958),
+  `LL` =  lr_stat,
+  `AIC` = aic
+  )
+
+# Criando a tabela estilizada com flextable
+library(flextable)
+ft <- flextable(data)|>
+  set_header_labels(
+    Id = "Id",
+    Desvio = "Desvio",
+    `GL` = "Graus  \n de liberdade",
+    `LL` = "Razão
+    de \n verossimilhança",
+    `AIC` = "AIC")
+
+ft <- theme_vanilla(ft)
+ft <- width(ft, j = 1, width = 0.5)  # Coluna 1 com 1.0 polegada
+ft <- width(ft, j = 2, width = 1.5)  # Coluna 1 com 1.0 polegada
+ft <- width(ft, j = 3, width = 1.2)  # Coluna 1 com 1.0 polegada
+ft <- width(ft, j = 4, width = 1.2)  # Coluna 1 com 1.0 polegada
+ft <- width(ft, j = 5, width = 1.2)  # Coluna 1 com 1.0 polegada
+ft <- width(ft, j = 6, width = 1.0)  # Coluna 1 com 1.0 polegada
+
+ft
+```
+
+É possível observar que o modelo independente, ou seja, aquele que não considera interações entre as variáveis, apresenta desvio de 1311,9, 959 graus de liberdade e um AIC de 1393,9. Os modelos 2 a 7 apresentam mudança no desvio bem pequena, indicando que a adição das interações não contribui significativamente para o modelo - o que é embasado também pelos resultados do teste de razão de verossimilhança. Já nos modelos 8 a 11, há uma maior queda no desvio e valores maiores também para o teste de razão de verossimilhança. No entanto, os valores de AIC são maiores, indicando que o ganho no ajuste pode não compensar a complexidade do modelo. Assim, observando o menor valor de AIC, a melhor decisão nesse caso é não adicionar interações entre as variáveis e adotar o modelo independente.
+
+```{r, echo=FALSE, include=FALSE}
+# Modelo independente 
+modelo_independente <- glm(Outcome ~ Gender + Area + AreaType + HouseType + Age_less_16_years,
+                   data = dados_modelo,
+                   family = binomial)
+
+# Modelo completo com interações até a ordem 3
+modelo_completo <- glm(
+  Outcome ~ Gender*Area*AreaType*HouseType*Age_less_16_years,
+  data = dados_modelo,
+  family = binomial
+)
+
+# Stepwise
+modelo_final <- step(
+  object = modelo_independente,
+  scope = list(lower = modelo_independente, upper = modelo_completo),
+  direction = "both",
+  trace = TRUE
+)
+```
+
+O modelo de regressão logística pode ser interpretado a partir das razões de chance entre as categorias de variáveis considerando uma categoria de referência. Além disso, também é possível obter um intervalo de confiança para essa razão de chances. Uma razão de chances maior que 1 indica aumento na chanece de ocorrência do evento, enquanto menor que 1 indica diminuição dessa chance Essas informações - considerando o modelo escolhido - são apresentadas abaixo.
+
+
+```{r}
+
+or <- round(exp(coef(modelo_final)), 3)
+ic <- round(exp(confint(modelo_final)), 3)
+nomes <- c(
+  "(Intercept)",
+  "GenderMale",
+  "AreaBadda",
+  "AreaBanasree",
+  "AreaBangshal",
+  "AreaBiman Bandar",
+  "AreaBosila",
+  "AreaCantonment",
+  "AreaChawkbazar",
+  "AreaDemra",
+  "AreaDhanmondi",
+  "AreaGendaria",
+  "AreaGulshan",
+  "AreaHazaribagh",
+  "AreaJatrabari",
+  "AreaKadamtali",
+  "AreaKafrul",
+  "AreaKalabagan",
+  "AreaKamrangirchar",
+  "AreaKeraniganj",
+  "AreaKhilgaon",
+  "AreaKhilkhet",
+  "AreaLalbagh",
+  "AreaMirpur",
+  "AreaMohammadpur",
+  "AreaMotijheel",
+  "AreaNew Market",
+  "AreaPallabi",
+  "AreaPaltan",
+  "AreaRamna",
+  "AreaRampura",
+  "AreaSabujbagh",
+  "AreaShahbagh",
+  "AreaSher-e-Bangla Nagar",
+  "AreaShyampur",
+  "AreaSutrapur",
+  "AreaTejgaon",
+  "AreaTypeUndeveloped",
+  "HouseTypeOther",
+  "HouseTypeTinshed",
+  "Age_less_16_yearsYes"
+)
+
+
+df_int <- data.frame(
+  `Variável` = nomes,
+  `OR` = or,
+  `IC` = ic
+  )
+
+# Criando a tabela estilizada com flextable
+
+int <- flextable(df_int)|>
+  set_header_labels(
+    `Variável` = "Variável",
+    `OR` = "OR",
+    `IC` = c("LI:IC(0.95), LS:IC(0.95)"))
+
+ft <- theme_vanilla(int)
+ft <- width(ft, j = 1, width = 1.0)  # Coluna 1 com 1.0 polegada
+ft <- width(ft, j = 2, width = 2.0)  # Coluna 1 com 1.0 polegada
+ft <- width(ft, j = 3, width = 3.0)  # Coluna 1 com 1.0 polegada
+
+ft
+
+```
+
+Aqui serão pontuadas algumas interpretações relevantes:
+
++ A razão de chances para os gêneros masculino e feminino é bem próxima de 1, indicando que há pouca diferença na chance de contrair dengue entre homens e mulheres em Bangladesh;
+
++ Os intervalos de confiança para a razão de chances das variáveis referentes ao tipo de casa, tipo de área e idade todos contém 1, indicando também que bão podemos afirmar que há diferença na chance de ter dengue nos diferentes grupos;
+
++ Para a variável referente à área, a área de referência utilizada foi Adabor. Algumas áreas apresentaram diferença na chance de testar positivo para dengue ao observar o intervalo de confiança, como Banasree, Ramna e Sutrapur. No entanto, o restante não aapontou diferença.
+
+
 
 # Conclusão
 
@@ -169,8 +396,4 @@ Visto que todos os intervalos de confiança para a razão de chance contém 1, p
 
 Códigos utilizados em R.
 
-```{r, eval=FALSE, echo=TRUE}
-
-
-```
-
+Copiar e colar o analises_dengue_bangladesh_script.R aqui !
