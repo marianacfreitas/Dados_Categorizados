@@ -52,13 +52,6 @@ dados <- dados |>
 write.csv(dados, "dados_tratados.csv")
 
 #--------------- Análise de teste diagnósticos -----------------------
-# A função confusionMatrix retorna:
-# Tabela teste x resultado real
-# Acurácia
-# Kappa (análise de concordância)
-# Teste de Mcnemar
-# Sensibilidade
-# Especificidade
 
 # métricas para NS1
 confusionMatrix(as.factor(dados$NS1), as.factor(dados$Outcome), positive = "Positive")
@@ -147,7 +140,7 @@ ic_log_gender <- log_or_gender + c(-1, 1) * z * se_log_or_gender
 ic_gender <- exp(ic_log_gender)
 
 # Resultado
-cat("🔹 Gender:\n")
+cat(" Gender:\n")
 cat("  OR =", round(or_gender, 3), "\n")
 cat("  log(OR) =", round(log_or_gender, 3), "\n")
 cat("  IC 95% OR = [", round(ic_gender[1], 3), ",", round(ic_gender[2], 3), "]\n\n")
@@ -167,7 +160,7 @@ se_log_or_area <- sqrt(1/a + 1/b + 1/c + 1/d)
 ic_log_area <- log_or_area + c(-1, 1) * z * se_log_or_area
 ic_area <- exp(ic_log_area)
 
-cat("🔹 AreaType:\n")
+cat(" AreaType:\n")
 cat("  OR =", round(or_area, 3), "\n")
 cat("  log(OR) =", round(log_or_area, 3), "\n")
 cat("  IC 95% OR = [", round(ic_area[1], 3), ",", round(ic_area[2], 3), "]\n\n")
@@ -186,7 +179,7 @@ se_log_or_age <- sqrt(1/a + 1/b + 1/c + 1/d)
 ic_log_age <- log_or_age + c(-1, 1) * z * se_log_or_age
 ic_age <- exp(ic_log_age)
 
-cat("🔹 Age < 16:\n")
+cat(" Age < 16:\n")
 cat("  OR =", round(or_age, 3), "\n")
 cat("  log(OR) =", round(log_or_age, 3), "\n")
 cat("  IC 95% OR = [", round(ic_age[1], 3), ",", round(ic_age[2], 3), "]\n\n")
@@ -276,3 +269,117 @@ lr_stat <- c(NA, round(diff(a$Deviance), 3))
 
 # Odds ratios e ICs
 exp(cbind(OR = round(coef(modelo_final), 3), round(confint(modelo_final), 3)) )
+
+
+# Medidas de assosiação de variaveis ordinais 
+
+library (DescTools)
+
+tab <- table(dados_tratados$Outcome, dados_tratados$Age_less_16_years)
+GoodmanKruskalGamma (tab)
+KendallTauB (tab)
+
+
+dados_tratados$AreaType <- factor(dados_tratados$AreaType, levels = c("Undeveloped", "Developed"))
+tab2 <- table(dados_tratados$Outcome, dados_tratados$AreaType)
+GoodmanKruskalGamma (tab2)
+KendallTauB (tab2)
+
+# Teste de tendencia linear de variaveis ordinais
+library(coin)
+CochranArmitageTest(tab)
+CochranArmitageTest(tab2)
+
+
+# Teste de Breslow day
+
+# Tabela estratificada Outcome x Age_less_16_years por AreaType
+tab_age_area <- with(dados_tratados, table(Age_less_16_years, Outcome, AreaType))
+tab_age_area
+# Aplicar o teste Breslow-Day e de Mantel
+BreslowDayTest(tab_age_area)
+mantelhaen.test(tab_age_area)
+
+
+# Tabela estratificada Outcome x Age_less_16_years por AreaType
+tab3 <- with(dados_tratados, table(Gender, Outcome, Area))
+# Aplicar o teste Breslow-Day e de Mantel
+BreslowDayTest(tab3)
+mantelhaen.test(tab3)
+
+library(dplyr)
+# Criar uma função para aplicar o qui-quadrado por área
+chi_sq_by_area <- dados_tratados %>%
+  group_by(Area) %>%
+  summarise(
+    p_value = chisq.test(table(Gender, Outcome))$p.value,
+    statistic = chisq.test(table(Gender, Outcome))$statistic
+  )
+
+print(chi_sq_by_area, n = 36)
+
+# associação simples entre AreaType e Outcome
+tab_area_outcome <- with(dados_tratados, table(AreaType, Outcome))
+chi_sq_area <- chisq.test(tab_area_outcome)
+chi_sq_area
+
+# Teste de simetria usando o teste de McNemar 
+tab_diagnostics <- with(dados_tratados, table(IgG, NS1))
+mcnemar.test(tab_diagnostics)
+
+# Teste de simetria usando o teste de McNemar 
+tab_diagnostics <- with(dados_tratados, table(IgG, IgM))
+mcnemar.test(tab_diagnostics)
+
+# Teste de simetria usando o teste de McNemar 
+tab_diagnostics <- with(dados_tratados, table(IgM, NS1))
+mcnemar.test(tab_diagnostics)
+
+
+# Teste de Homogeneidade Marginal para duas variáveis categóricas
+tab_gender_outcome <- with(dados_tratados, table(Gender, Outcome))
+homogeneidade_test <- chisq.test(tab_gender_outcome)
+print(homogeneidade_test)
+
+tab_area_outcome <- with(dados_tratados, table(Area, Outcome))
+homogeneidade_test_2 <- chisq.test(tab_area_outcome)
+print(homogeneidade_test_2)
+
+
+# Graficos da analise exploratória
+ggplot(dados_tratados) +
+  aes(x = NS1, fill = Outcome) +
+  geom_bar() +
+  scale_fill_manual(values = c("Negative" = "#FC0041", "Positive" = "#21B7D1")) +
+  labs(title = "NS1 por Outcome") +
+  theme_light(base_size = 14) +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+ggplot(dados_tratados) +
+  aes(x = IgG, fill = Outcome) +
+  geom_bar() +
+  scale_fill_manual(values = c("Negative" = "#FC0041", "Positive" = "#21B7D1")) +
+  labs(title = "lgG por Outcome ") +
+  theme_light(base_size = 14) +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+ggplot(dados_tratados) +
+  aes(x = IgM, fill = Outcome) +
+  geom_bar() +
+  scale_fill_manual(values = c("Negative" = "#FC0041", "Positive" = "#21B7D1")) +
+  labs(title = "lgM por Outcome ") +
+  theme_light(base_size = 14) +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+ggplot(dados_tratados) +
+  aes(x = Age_less_16_years, fill = Outcome) +
+  geom_bar() +
+  scale_fill_manual(values = c("Negative" = "#FC0041", "Positive" = "#21B7D1")) +
+  theme_light(base_size = 14) +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
+  facet_wrap(vars(Gender)) +
+  labs(
+    title = "Variável Idade por Outcome separados por gênero",
+    x = "Idade < 16 anos",
+    y = "Contagem"
+  )
