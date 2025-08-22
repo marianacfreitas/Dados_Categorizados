@@ -1,0 +1,19 @@
+/* xaringan-themer.css */
+.remark-slide-content {
+  background-color: #f7ede2; /* Fundo pêssego claro */
+  color: #333333; /* Texto cinza escuro */
+}
+
+.remark-slide-content h1,
+.remark-slide-content h2,
+.remark-slide-content h3 {
+  color: #79305a; /* Títulos em tom de rosa antigo */
+}
+
+.remark-slide-content a {
+  color: #6dd19c; /* Links em verde menta */
+}
+
+.remark-slide-content .tiny {
+  font-size: 80%;
+}

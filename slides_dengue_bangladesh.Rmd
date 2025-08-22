@@ -1,0 +1,32 @@
+---
+title: "Análise Estatística da Dengue em Bangladesh"
+author: "Mariana Freitas e Aline Pires"
+date: "Setembro de 2025"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: "xaringan-themer.css"
+    nature:
+      highlightStyle: github
+      highlightLines: yes
+      countIncrementalSlides: no
+subtitle: Relatório de Pesquisa
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  warning = FALSE, 
+  message = FALSE
+)
+```
+
+
+---
+
+# Introdução
+
++ Dengue
++ Bangladesh
+
+---
