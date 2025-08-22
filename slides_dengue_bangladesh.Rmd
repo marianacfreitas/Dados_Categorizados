@@ -1,7 +1,7 @@
 ---
 title: "Análise Estatística da Dengue em Bangladesh"
 author: "Mariana Freitas e Aline Pires"
-date: "Setembro de 2025"
+date: "25 de Agosto de 2025"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -24,9 +24,474 @@ knitr::opts_chunk$set(
 
 ---
 
-# Introdução
+# Dados escolhidos para aplicação
 
-+ Dengue
-+ Bangladesh
++ Base de dados sobre casos de Dengue em Bangladesh
+
++ Link para base no Kaggle: [https://www.kaggle.com/api/v1/datasets/download/kawsarahmad/dengue-dataset-bangladesh](https://www.kaggle.com/api/v1/datasets/download/kawsarahmad/dengue-dataset-bangladesh)
+
++ Situação problema: a dengue é uma doença viral transmitida por mosquitos do gênero Aedes, asendo um dos principais desafios de saúde pública em regiões tropicais e subtropicais, como Bangladesh
+
++ Objetivo: aplicar técnicas estatísticas ao banco de dados de indivíduos testados para dengue em Bangladesh, buscando compreender as relações entre características individuais, fatores ambientais e resultados dos testes de diagnósticos
 
 ---
+
+# Variáveis utilizadas
+
+- Variável resposta: `Outcome` indicando a presença ou ausência dengue. Pode ser *Positive* ou *Negative*.
+
+- Variáveis de diagnóstico: Resultados dos testes `NS1`, `IgG` e `IgM`, têm como resposta *Positive* ou *Negative*.
+
+- Variáveis sociodemográficas: as variáveis `Gender` (*male* ou *female*),  `ageless16years` (*No* ou *Yes*).
+
+- Variáveis ambientais: `AreaType` representa o tipo de área de residência do indivíduo (*Developed* ou *Undeveloped*), já a `Area` contém a área específica de moradia (diversas regiões).
+
+- Variáveis habitacionais: Contém `HouseType` que represente o tipo de moradia (*Building*, *Tin-Shed* ou *Others*).
+
++ Obs: `AgeLess16Years` foi criada a partir da variável `Age` nos dados originais, com base no valor de `Age` que maximiza a diferença do desfecho entre os grupos.
+
+---
+
+# Análise Exploratória
+
+```{r}
+library(patchwork)
+
+library(ggplot2)
+library(readr)
+library(dplyr)
+
+dados_tratados <- read.csv("dados_tratados.csv")
+
+p1 <- ggplot(dados_tratados) +
+  aes(x = NS1, fill = Outcome) +
+  geom_bar() +
+  scale_fill_manual(values = c("Negative" = "#FC0041", "Positive" = "#21B7D1")) +
+  labs(title = "NS1 por Outcome") +
+  theme_light(base_size = 14) +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+p2 <- ggplot(dados_tratados) +
+  aes(x = IgG, fill = Outcome) +
+  geom_bar() +
+  scale_fill_manual(values = c("Negative" = "#FC0041", "Positive" = "#21B7D1")) +
+  labs(title = "lgG por Outcome ", y = "Contagem") +
+  theme_light(base_size = 14) +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+p3 <- ggplot(dados_tratados) +
+  aes(x = IgM, fill = Outcome) +
+  geom_bar() +
+  scale_fill_manual(values = c("Negative" = "#FC0041", "Positive" = "#21B7D1")) +
+  labs(title = "lgM por Outcome ", y = "Contagem") +
+  theme_light(base_size = 14) +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+p4 <-ggplot(dados_tratados) +
+  aes(x = Age_less_16_years, fill = Outcome) +
+  geom_bar() +
+  scale_fill_manual(values = c("Negative" = "#FC0041", "Positive" = "#21B7D1")) +
+  theme_light(base_size = 14) +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
+  facet_wrap(vars(Gender)) +
+  labs(
+    title = "Variável Idade por Outcome",
+    x = "Idade < 16 anos",
+    y = "Contagem"
+  )
+
+(p1+p2)/(p3+p4)
+
+
+```
+
+---
+
+# Avaliação de testes diagnósticos
+
+
+```{r, echo=FALSE, results='asis'}
+# Dados da tabela de testes diagnósticos
+dados_diagnostico <- data.frame(
+  Teste_Diagnostico = c("NS1", "IgG", "IgM"),
+  Sensibilidade = c(0.974, 1.000, 0.486),
+  Especificidade = c(1.000, 1.000, 0.538)
+)
+
+library(flextable)
+
+flextable(dados_diagnostico) %>%
+  set_caption(caption = "Avaliação de Testes Diagnósticos") %>%
+  set_header_labels(
+    Teste_Diagnostico = "Teste Diagnóstico",
+    Sensibilidade = "Sensibilidade",
+    Especificidade = "Especificidade"
+  ) %>%
+  theme_vanilla() %>%
+  bg(bg = "#a3606f", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  width(j = 1, width = 2.5) %>%
+  width(j = 2, width = 1.8) %>%
+  width(j = 3, width = 1.8) %>%
+  align(align = "center", part = "all") %>%
+  autofit()
+```
+
+
+
+Conclusão: O teste IgG parece ser o padrão ouro para identificar a Dengue, já que seus valores são iguais aos valores de `Outcome`.
+
+---
+
+# Tabelas de Contigência
+
++ Tipo de estudo transversal: os dados são colhidos em um ponto específico no tempo após a ocorrência ou não de dengue; não houve acompanhamento dos indivíduos.
+
+
++ Criação de tabelas $2x2$ para verificar se há diferenças nas proporções de doentes nas classes de variáveis binárias.
+
+
+```{r, echo=FALSE, results='asis'}
+# Dados da tabela de contingência: Gênero
+dados_gender <- data.frame(
+  Gender = c("Female", "Male"),
+  Negative = c(243, 224),
+  Positive = c(281, 252)
+)
+
+library(flextable)
+
+flextable(dados_gender) %>%
+  set_caption(caption = "Tabela de Contingência: Gênero x Outcome") %>%
+  set_header_labels(
+    Gender = "Gender / Outcome",
+    Negative = "Negative",
+    Positive = "Positive"
+  ) %>%
+  theme_vanilla() %>%
+  bg(bg = "#a3606f", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  align(align = "center", part = "all") %>%
+  autofit()
+
+
+
+```
+
+
+
+---
+
+# Tabelas de Contigência
+
+```{r,  results='asis'}
+# Dados da tabela de contingência: Tipo de Área
+dados_area <- data.frame(
+  AreaType = c("Developed", "Undeveloped"),
+  Negative = c(244, 223),
+  Positive = c(257, 276)
+)
+
+flextable(dados_area) %>%
+  set_caption(caption = "Tabela de Contingência: Tipo de Área x Outcome") %>%
+  set_header_labels(
+    AreaType = "AreaType / Outcome",
+    Negative = "Negative",
+    Positive = "Positive"
+  ) %>%
+  theme_vanilla() %>%
+  bg(bg = "#a3606f", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  align(align = "center", part = "all") %>%
+  autofit()
+
+
+# Dados da tabela de contingência: Idade
+dados_age <- data.frame(
+  Age_less_16_years = c("No", "Yes"),
+  Negative = c(406, 61),
+  Positive = c(452, 81)
+)
+
+flextable(dados_age) %>%
+  set_caption(caption = "Tabela de Contingência: Idade x Outcome") %>%
+  set_header_labels(
+    Age_less_16_years = "Age_less_16_years / Outcome",
+    Negative = "Negative",
+    Positive = "Positive"
+  ) %>%
+  theme_vanilla() %>%
+  bg(bg = "#a3606f", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  align(align = "center", part = "all") %>%
+  autofit()
+```
+
+---
+
+# Tabelas de Contigência
+
++ Não é possível concluir muito apenas observando as tabelas, é útil calcular as estimações pontuais e intervalos de confiança para as diferenças nas proporções de doentes.
+
+```{r, echo=FALSE, results='asis'}
+
+# Dados de resultados de inferência
+dados_inferencia <- data.frame(
+  Variavel = c("Gender", "AreaType", "Age_less_16_years"),
+  Diferenca_na_proporcao_de_doentes = c("Female - Male", "Undeveloped - Developed", "No - Yes"),
+  Estimacao_pontual = c(0.006848, 0.040132, -0.04361),
+  IC_95 = c("[-0.055,  0.069]", "[-0.021,  0.102]", "[-0.132,  0.044]")
+)
+
+library(flextable)
+
+flextable(dados_inferencia) %>%
+  set_caption("Diferença nas proporções de doentes") %>%
+  set_header_labels(
+    Variavel = "Variável",
+    Diferenca_na_proporcao_de_doentes = "Diferença na proporção de doentes",
+    Estimacao_pontual = "Estimação pontual",
+    IC_95 = "IC (95%)"
+  ) %>%
+  theme_vanilla() %>%
+  bg(bg = "#a3606f", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  width(j = 1:4, width = 1.8) %>%
+  align(align = "center", part = "all")
+```
+
+
++ Não há diferença nas proporções de doentes entre as classes das variáveis `Gender`, `AreaType` e `Age_less_16_years`.
+
+---
+
+# Tabelas de Contigência
+
++ Cálculo das razões de chance para verificar se há associação entre a ocorrência de doença e as variáveis binárias.
+
+```{r, echo=FALSE, results='asis'}
+# Dados de razões de chance
+dados_odds <- data.frame(
+  Variavel = c("Gender", "AreaType", "Age_less_16_years"),
+  Razao_das_chances_de_apresentar_dengue = c("Male/Female", "Developed/Undeveloped", "Yes/No"),
+  Estimacao_pontual = c(0.973, 0.851, 1.19),
+  IC_95 = c("[0.759, 1.248]", "[0.664, 1.091]", "[0.834, 1.707]")
+)
+
+flextable(dados_odds) %>%
+  set_caption("Razões de Chance de apresentar dengue") %>%
+  set_header_labels(
+    Variavel = "Variável",
+    Razao_das_chances_de_apresentar_dengue = "Razão das chances de apresentar dengue",
+    Estimacao_pontual = "Estimação pontual",
+    IC_95 = "IC (95%)"
+  ) %>%
+  theme_vanilla() %>%
+  bg(bg = "#a3606f", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  width(j = 1:4, width = 1.8) %>%
+  align(align = "center", part = "all")
+```
+
+
++ Não há diferença causada pelas classes entre as chances de ter dengue.
+
+---
+
+# Inferência para Tabelas de Contigência
+
++ Testes para variáveis ordinais a fim de avaliar a associação e possíveis tendências entre as variáveis ordinais `Ageless16years` e `AreaType`` em relação à ocorrência de dengue. Teste de Gama de Goodman e Kruskal, para medir a força e a direção da associação entre duas variáveis ordinais, e  o teste Tau-b que também avalia associação considerando empates. Teste de Cochran-Armitage para se existe tendência linear.
+
+```{r, echo=FALSE, results='asis'}
+# Dados da tabela de medidas de associação
+dados_medidas <- data.frame(
+  Medidas = c("Gama de Goodman e Kruskal", "Tau-b"),
+  Age_less_16_years = c(0.0878, 0.0305),
+  AreaType = c(-0.0805, -0.0402)
+)
+
+library(flextable)
+
+flextable(dados_medidas) %>%
+  set_caption(caption = "Medidas de Associação para Variáveis Ordinais") %>%
+  set_header_labels(
+    Medidas = "Medidas / Variáveis",
+    Age_less_16_years = "Age_less_16_years",
+    AreaType = "AreaType"
+  ) %>%
+  theme_vanilla() %>%
+  bg(bg = "#a3606f", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  width(j = 1, width = 3.0) %>%
+  width(j = 2, width = 2.0) %>%
+  width(j = 3, width = 1.5) %>%
+  align(align = "center", part = "all")
+
+dados_pvalor <- data.frame(
+  P_valor_Variaveis = "p-valor",
+  Age_less_16_years = 0.3346,
+  AreaType = 0.2034
+)
+
+library(flextable)
+
+flextable(dados_pvalor) %>%
+  set_caption(caption = "P-valores do Teste de Cochran-Armitage") %>%
+  set_header_labels(
+    P_valor_Variaveis = "P-valor / Variáveis",
+    Age_less_16_years = "Age_less_16_years",
+    AreaType = "AreaType"
+  ) %>%
+  theme_vanilla() %>%
+  bg(bg = "#a3606f", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  width(j = 1, width = 3.0) %>%
+  width(j = 2, width = 2.0) %>%
+  width(j = 3, width = 1.5) %>%
+  align(align = "center", part = "all")
+```
+
++ As medidas de associação são fracas. 
+
++ Não há tendência linear.
+
+
+---
+
+# Associação: idade x ocorrência de dengue controlado pelo tipo de área
+
++ Teste de Breslow-Day: a fim de verificar se a associação entre o desfecho de dengue (`Outcome`) e idade (`Age_less_16_years`) é homogênea ao longo das categorias do tipo de área (`AreaType`); indicou homogeneidade das razões de chances entre os estratos (p-valor = 0,43).
+
++ Teste de Mantel-Haenszel: para estimar a associação ajustada entre ser menor de 16 anos e o desfecho de dengue, controlando pelo tipo de área de residência; não evidenciou associação significativa.
+
++ Paradoxo de Simpson: ausência de variação significativa nas razões de chances entre os estratos, evidenciada pelo teste de Breslow-Day, indica que não ocorre o paradoxo de Simpson neste caso — ou seja, o ajuste pelo tipo de área não alterou a direção ou a magnitude da associação entre idade e dengue.
+
++ Não há associação relevante entre ser menor de 16 anos e a ocorrência de dengue, independentemente do tipo de área onde o indivíduo reside.
+
+---
+
+# Associação: gênero x ocorrência de dengue controlado pela área
+
++ Teste de Breslow-Day: avaliar a associação entre gênero e desfecho de dengue estratificada pelas 36 áreas do estudo; indicou heterogeneidade significativa nas razões de chances entre os estratos (p = 0,02), ou seja, intensidade e/ou direção da associação entre gênero e ocorrência de dengue variam conforme a área de residência.
+
++ Teste de Mantel-Haenszel: para estimar a razão de chances comum ajustada pelo estrato, mas não evidenciou associação estatisticamente significativa entre gênero e dengue na amostra combinada com intervalo de confiança para a razão de chances (IC 95%: 0,74 a 1,23).
+
++ Paradoxo de Simpson: presença de heterogeneidade nas razões de chances, aliada à ausência de associação significativa no teste combinado, sugere a ocorrência do paradoxo de Simpson e classifica-se a área de residência como um fator de confusão para essa análise.
+
++ Teste Qui-quadrado: teste aplicado em cada uma das 36 áreas específicas mostraram que, em algumas áreas como Adabor (p = 0,017) e Sutrapur (p = 0,02), há associação estatisticamente significativa entre gênero e dengue, enquanto nas demais áreas a associação não foi significativa.
+
+---
+
+# Avaliação de Homogeneidade Marginal
+
++ Homogeneidade Marginal: avaliar se as distribuições do desfecho dengue são homogêneas entre diferentes grupos das variáveis área específica e gênero.
+
++ Homogeneidade Marginal para Área: teste qui-quadrado indicou rejeição da hipótese de homogeneidade (p-valor = 0,0015) para as áreas avaliadas - as distribuições do desfecho dengue variam significativamente entre as áreas.
+
++ Homogeneidade Marginal para Gênero: ao testar a homogeneidade entre gênero e desfecho, não houve evidência de diferença nas distribuições marginais (p = 0,88), indicando que a proporção de casos de dengue não difere de forma significativa entre os gêneros na amostra.
+
++ Conclusão: importância de considerar a área de residência como fator relevante que influencia a ocorrência do desfecho dengue.
+
+---
+
+# Modelagem: Regressão Logística
+
++ Regressão logística é uma utilizada para modelar a relação entre uma variável resposta dicotômica e as variáveis explicativas.
+
++ Quando as variáveis explicativas são categorizadas, elas são incluídas no modelo por meio de variáveis chamadas de *dummies*, permitindo avaliar o efeito de cada categoria em comparação a uma referência.
+
++ Esse modelo estima a chance do evento de interesse ocorrer a partir do logaritmo da razão de chance, o que possibilita interpretar o impacto de cada categoria na chance do desfecho.
+
++ Para a modelagem não foram utilizadas as variáveis IgG, IgM e NS1, visto que os testes explicam quase por completo o desfecho, fazendo com que não seja possível os coeficientes do modelo convergirem. Todas as outras variáveis foram utilizadas.
+
+---
+
+# Modelagem: Regressão Logística
+
++ Para selecionar se seria incluída a seleção de alguma interação entre variáveis no modelo, foi utilizado o método de seleção *stepwise*, que, de forma iterativa, avalia se a remoção ou adição de interações entre variáveis acarreta em uma diminuição do AIC.
+
++ Objetivo: encontrar um modelo mais simples e com bom ajuste, evitando o excesso de variáveis que não contribuem significativamente para o modelo.
+
++ O AIC é uma boa métrica para alcançar essa meta, já que penaliza a complexidade do modelo para evitar problemas de  *overfitting*, mas também considera se o modelo se ajusta bem aos dados, cumprindo então o princípio da parcimônia.
+
+---
+
+# Modelagem: Regressão Logística
+
+```{r, results='asis'}
+# Certifique-se de que os pacotes necessários estão carregados
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+# Seus dados, exatamente como você os criou
+data <- data.frame(
+  Id = c(1:11),
+  Modelo = c("Independente", "Adição de interação Gender:AreaType",
+             "Adição de interação Gender:Age_less_16_years",
+             "Adição de interação Age_less_16_years:AreaType",
+             "Adição de interação HouseType:Age_less_16_years",
+             "Adição de interação Gender:Housetype",
+             "Adição de interação HouseType:AreaType",
+             "Adição de interação Gender:Area",
+             "Adição de interação Area:Age_less_16_years",
+             "Adição de interação Area:AreaType",
+             "Adição de interação Area:HouseType"),
+  
+  Desvio = c(1311.900, 1311.529, 1311.719, 1311.888, 1310.106, 1311.384, 1311.582, 1255.924, 1272.444, 1279.148, 1249.089),
+  
+  GL = c(959, 958, 958, 958, 957, 957, 957, 924, 925, 924, 958),
+  `Razão.de.verossimilhança` = c(NA, NA,  -0.561,   0.022,   1.950,
+-3.059,   1.079,  55.855, -72.177,   9.816, 36.762),
+
+  `AIC` = c(1393.900, 1395.529, 1395.719, 1395.888,
+            1396.106, 1397.384, 1397.582, 1407.924,
+            1422.444, 1431.148, 1471.089)
+)
+
+# Renomear colunas para o kable
+colnames(data) <- c("Id", "Modelo", "Desvio", "Graus de liberdade", "Razão de verossimilhança", "AIC")
+
+# Gerar a tabela com kable e estilizar com kableExtra
+data %>%
+  kable("html", booktabs = TRUE) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = TRUE,
+    font_size = 12
+  ) %>%
+  row_spec(0, bold = TRUE, background = "#a3606f", color = "white") %>%
+  scroll_box(width = "100%", height = "400px")
+```
+
+---
+
+# Modelagem: Regressão Logística
+
++ Modelo independente: apresenta desvio de 1311,9, 959 graus de liberdade e um AIC de 1393,9.
+
++ Modelos 2 a 7: apresentam mudança no desvio bem pequena, indicando que a adição das interações não contribui significativamente para o modelo - o que é embasado também pelos resultados do teste de razão de verossimilhança.
+
++ Modelos 8 a 11: maior queda no desvio e valores maiores também para o teste de razão de verossimilhança. No entanto, os valores de AIC são maiores, indicando que o ganho no ajuste pode não compensar a complexidade do modelo.
+
++ Decisão: observando o menor valor de AIC, a melhor decisão nesse caso é não adicionar interações entre as variáveis e adotar o modelo independente.
+
+---
+
+# Interpretação do Modelo
+
++ A razão de chances para os gêneros masculino e feminino é bem próxima de 1, indicando que há pouca diferença na chance de contrair dengue entre homens e mulheres em Bangladesh;
+
++ Os intervalos de confiança para a razão de chances das variáveis referentes ao tipo de casa, tipo de área e idade todos contém 1, indicando também que bão podemos afirmar que há diferença na chance de ter dengue nos diferentes grupos;
+
++ Para a variável referente à área, a área de referência utilizada foi Adabor. Algumas áreas apresentaram diferença na chance de testar positivo para dengue ao observar o intervalo de confiança, como Banasree, Ramna e Sutrapur. No entanto, o restante não apontou diferença.
+
+---
+
+
+
+
+
+
+
+

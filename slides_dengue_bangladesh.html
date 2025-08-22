@@ -5,6 +5,10 @@
     <meta charset="utf-8" />
     <meta name="author" content="Mariana Freitas e Aline Pires" />
     <script src="libs/header-attrs-2.27/header-attrs.js"></script>
+    <link href="libs/tabwid-1.1.3/tabwid.css" rel="stylesheet" />
+    <script src="libs/tabwid-1.1.3/tabwid.js"></script>
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -21,7 +25,7 @@ class: center, middle, inverse, title-slide
 ### Mariana Freitas e Aline Pires
 ]
 .date[
-### Setembro de 2025
+### 25 de Agosto de 2025
 ]
 
 ---
@@ -32,12 +36,300 @@ class: center, middle, inverse, title-slide
 
 ---
 
-# Introdução
+# Dados escolhidos para aplicação
 
-+ Dengue
-+ Bangladesh
++ Base de dados sobre casos de Dengue em Bangladesh
+
++ Link para base no Kaggle: [https://www.kaggle.com/api/v1/datasets/download/kawsarahmad/dengue-dataset-bangladesh](https://www.kaggle.com/api/v1/datasets/download/kawsarahmad/dengue-dataset-bangladesh)
+
++ Situação problema: a dengue é uma doença viral transmitida por mosquitos do gênero Aedes, asendo um dos principais desafios de saúde pública em regiões tropicais e subtropicais, como Bangladesh
+
++ Objetivo: aplicar técnicas estatísticas ao banco de dados de indivíduos testados para dengue em Bangladesh, buscando compreender as relações entre características individuais, fatores ambientais e resultados dos testes de diagnósticos
 
 ---
+
+# Variáveis utilizadas
+
+- Variável resposta: `Outcome` indicando a presença ou ausência dengue. Pode ser *Positive* ou *Negative*.
+
+- Variáveis de diagnóstico: Resultados dos testes `NS1`, `IgG` e `IgM`, têm como resposta *Positive* ou *Negative*.
+
+- Variáveis sociodemográficas: as variáveis `Gender` (*male* ou *female*),  `ageless16years` (*No* ou *Yes*).
+
+- Variáveis ambientais: `AreaType` representa o tipo de área de residência do indivíduo (*Developed* ou *Undeveloped*), já a `Area` contém a área específica de moradia (diversas regiões).
+
+- Variáveis habitacionais: Contém `HouseType` que represente o tipo de moradia (*Building*, *Tin-Shed* ou *Others*).
+
++ Obs: `AgeLess16Years` foi criada a partir da variável `Age` nos dados originais, com base no valor de `Age` que maximiza a diferença do desfecho entre os grupos.
+
+---
+
+# Análise Exploratória
+
+![](slides_dengue_bangladesh_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
+---
+
+# Avaliação de testes diagnósticos
+
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-91a8cecc{}.cl-91a0a5b2{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(255, 255, 255, 1.00);background-color:transparent;}.cl-91a0a5bc{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-91a4345c{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-91a44762{width:1.601in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91a4476c{width:1.27in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91a44776{width:1.355in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91a44777{width:1.601in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91a44778{width:1.27in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91a44780{width:1.355in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91a4478a{width:1.601in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91a4478b{width:1.27in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91a44794{width:1.355in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91a44795{width:1.601in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91a44796{width:1.27in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91a44797{width:1.355in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-91a8cecc'&gt;&lt;caption style="display:table-caption;margin:0pt;text-align:center;border-bottom: 0.00pt solid transparent;border-top: 0.00pt solid transparent;border-left: 0.00pt solid transparent;border-right: 0.00pt solid transparent;padding-top:3pt;padding-bottom:3pt;padding-left:3pt;padding-right:3pt;line-height: 1;background-color:transparent;"&gt;&lt;span&gt;Avaliação de Testes Diagnósticos&lt;/span&gt;&lt;/caption&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-91a44762"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5b2"&gt;Teste Diagnóstico&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-91a4476c"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5b2"&gt;Sensibilidade&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-91a44776"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5b2"&gt;Especificidade&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91a44777"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5bc"&gt;NS1&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91a44778"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5bc"&gt;0.974&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91a44780"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5bc"&gt;1.000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91a4478a"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5bc"&gt;IgG&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91a4478b"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5bc"&gt;1.000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91a44794"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5bc"&gt;1.000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91a44795"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5bc"&gt;IgM&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91a44796"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5bc"&gt;0.486&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91a44797"&gt;&lt;p class="cl-91a4345c"&gt;&lt;span class="cl-91a0a5bc"&gt;0.538&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+
+
+Conclusão: O teste IgG parece ser o padrão ouro para identificar a Dengue, já que seus valores são iguais aos valores de `Outcome`.
+
+---
+
+# Tabelas de Contigência
+
++ Tipo de estudo transversal: os dados são colhidos em um ponto específico no tempo após a ocorrência ou não de dengue; não houve acompanhamento dos indivíduos.
+
+
++ Criação de tabelas `\(2x2\)` para verificar se há diferenças nas proporções de doentes nas classes de variáveis binárias.
+
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-91bf938c{}.cl-91b9d3f2{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(255, 255, 255, 1.00);background-color:transparent;}.cl-91b9d406{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-91bc1a2c{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-91bc3476{width:1.61in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91bc3480{width:0.922in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91bc348a{width:0.871in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91bc348b{width:1.61in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91bc3494{width:0.922in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91bc349e{width:0.871in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91bc349f{width:1.61in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91bc34a8{width:0.922in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91bc34a9{width:0.871in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-91bf938c'&gt;&lt;caption style="display:table-caption;margin:0pt;text-align:center;border-bottom: 0.00pt solid transparent;border-top: 0.00pt solid transparent;border-left: 0.00pt solid transparent;border-right: 0.00pt solid transparent;padding-top:3pt;padding-bottom:3pt;padding-left:3pt;padding-right:3pt;line-height: 1;background-color:transparent;"&gt;&lt;span&gt;Tabela de Contingência: Gênero x Outcome&lt;/span&gt;&lt;/caption&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-91bc3476"&gt;&lt;p class="cl-91bc1a2c"&gt;&lt;span class="cl-91b9d3f2"&gt;Gender / Outcome&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-91bc3480"&gt;&lt;p class="cl-91bc1a2c"&gt;&lt;span class="cl-91b9d3f2"&gt;Negative&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-91bc348a"&gt;&lt;p class="cl-91bc1a2c"&gt;&lt;span class="cl-91b9d3f2"&gt;Positive&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91bc348b"&gt;&lt;p class="cl-91bc1a2c"&gt;&lt;span class="cl-91b9d406"&gt;Female&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91bc3494"&gt;&lt;p class="cl-91bc1a2c"&gt;&lt;span class="cl-91b9d406"&gt;243&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91bc349e"&gt;&lt;p class="cl-91bc1a2c"&gt;&lt;span class="cl-91b9d406"&gt;281&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91bc349f"&gt;&lt;p class="cl-91bc1a2c"&gt;&lt;span class="cl-91b9d406"&gt;Male&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91bc34a8"&gt;&lt;p class="cl-91bc1a2c"&gt;&lt;span class="cl-91b9d406"&gt;224&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91bc34a9"&gt;&lt;p class="cl-91bc1a2c"&gt;&lt;span class="cl-91b9d406"&gt;252&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+
+
+---
+
+# Tabelas de Contigência
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-91d4d15c{}.cl-91ceea9e{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(255, 255, 255, 1.00);background-color:transparent;}.cl-91ceeaa8{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-91d11e04{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-91d12e08{width:1.771in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91d12e12{width:0.922in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91d12e13{width:0.871in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91d12e1c{width:1.771in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91d12e1d{width:0.922in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91d12e1e{width:0.871in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91d12e26{width:1.771in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91d12e27{width:0.922in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91d12e30{width:0.871in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-91d4d15c'&gt;&lt;caption style="display:table-caption;margin:0pt;text-align:center;border-bottom: 0.00pt solid transparent;border-top: 0.00pt solid transparent;border-left: 0.00pt solid transparent;border-right: 0.00pt solid transparent;padding-top:3pt;padding-bottom:3pt;padding-left:3pt;padding-right:3pt;line-height: 1;background-color:transparent;"&gt;&lt;span&gt;Tabela de Contingência: Tipo de Área x Outcome&lt;/span&gt;&lt;/caption&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-91d12e08"&gt;&lt;p class="cl-91d11e04"&gt;&lt;span class="cl-91ceea9e"&gt;AreaType / Outcome&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-91d12e12"&gt;&lt;p class="cl-91d11e04"&gt;&lt;span class="cl-91ceea9e"&gt;Negative&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-91d12e13"&gt;&lt;p class="cl-91d11e04"&gt;&lt;span class="cl-91ceea9e"&gt;Positive&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91d12e1c"&gt;&lt;p class="cl-91d11e04"&gt;&lt;span class="cl-91ceeaa8"&gt;Developed&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91d12e1d"&gt;&lt;p class="cl-91d11e04"&gt;&lt;span class="cl-91ceeaa8"&gt;244&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91d12e1e"&gt;&lt;p class="cl-91d11e04"&gt;&lt;span class="cl-91ceeaa8"&gt;257&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91d12e26"&gt;&lt;p class="cl-91d11e04"&gt;&lt;span class="cl-91ceeaa8"&gt;Undeveloped&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91d12e27"&gt;&lt;p class="cl-91d11e04"&gt;&lt;span class="cl-91ceeaa8"&gt;223&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91d12e30"&gt;&lt;p class="cl-91d11e04"&gt;&lt;span class="cl-91ceeaa8"&gt;276&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-91e7fe3a{}.cl-91e1b37c{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(255, 255, 255, 1.00);background-color:transparent;}.cl-91e1b386{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-91e40b5e{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-91e41d60{width:2.485in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91e41d6a{width:0.922in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91e41d74{width:0.871in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91e41d75{width:2.485in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91e41d76{width:0.922in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91e41d77{width:0.871in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91e41d78{width:2.485in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91e41d7e{width:0.922in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91e41d7f{width:0.871in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-91e7fe3a'&gt;&lt;caption style="display:table-caption;margin:0pt;text-align:center;border-bottom: 0.00pt solid transparent;border-top: 0.00pt solid transparent;border-left: 0.00pt solid transparent;border-right: 0.00pt solid transparent;padding-top:3pt;padding-bottom:3pt;padding-left:3pt;padding-right:3pt;line-height: 1;background-color:transparent;"&gt;&lt;span&gt;Tabela de Contingência: Idade x Outcome&lt;/span&gt;&lt;/caption&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-91e41d60"&gt;&lt;p class="cl-91e40b5e"&gt;&lt;span class="cl-91e1b37c"&gt;Age_less_16_years / Outcome&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-91e41d6a"&gt;&lt;p class="cl-91e40b5e"&gt;&lt;span class="cl-91e1b37c"&gt;Negative&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-91e41d74"&gt;&lt;p class="cl-91e40b5e"&gt;&lt;span class="cl-91e1b37c"&gt;Positive&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91e41d75"&gt;&lt;p class="cl-91e40b5e"&gt;&lt;span class="cl-91e1b386"&gt;No&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91e41d76"&gt;&lt;p class="cl-91e40b5e"&gt;&lt;span class="cl-91e1b386"&gt;406&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91e41d77"&gt;&lt;p class="cl-91e40b5e"&gt;&lt;span class="cl-91e1b386"&gt;452&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91e41d78"&gt;&lt;p class="cl-91e40b5e"&gt;&lt;span class="cl-91e1b386"&gt;Yes&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91e41d7e"&gt;&lt;p class="cl-91e40b5e"&gt;&lt;span class="cl-91e1b386"&gt;61&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91e41d7f"&gt;&lt;p class="cl-91e40b5e"&gt;&lt;span class="cl-91e1b386"&gt;81&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+---
+
+# Tabelas de Contigência
+
++ Não é possível concluir muito apenas observando as tabelas, é útil calcular as estimações pontuais e intervalos de confiança para as diferenças nas proporções de doentes.
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-91f86374{}.cl-91f1a3ea{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(255, 255, 255, 1.00);background-color:transparent;}.cl-91f1a3f4{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-91f4941a{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-91f4a356{width:1.8in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91f4a360{width:1.8in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91f4a361{width:1.8in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-91f4a36a{width:1.8in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-91f86374'&gt;&lt;caption style="display:table-caption;margin:0pt;text-align:center;border-bottom: 0.00pt solid transparent;border-top: 0.00pt solid transparent;border-left: 0.00pt solid transparent;border-right: 0.00pt solid transparent;padding-top:3pt;padding-bottom:3pt;padding-left:3pt;padding-right:3pt;line-height: 1;background-color:transparent;"&gt;&lt;span&gt;Diferença nas proporções de doentes&lt;/span&gt;&lt;/caption&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-91f4a356"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3ea"&gt;Variável&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-91f4a356"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3ea"&gt;Diferença na proporção de doentes&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-91f4a356"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3ea"&gt;Estimação pontual&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-91f4a356"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3ea"&gt;IC (95%)&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91f4a360"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;Gender&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91f4a360"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;Female - Male&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91f4a360"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;0.006848&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91f4a360"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;[-0.055,  0.069]&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91f4a361"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;AreaType&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91f4a361"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;Undeveloped - Developed&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91f4a361"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;0.040132&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91f4a361"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;[-0.021,  0.102]&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-91f4a36a"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;Age_less_16_years&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91f4a36a"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;No - Yes&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91f4a36a"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;-0.043610&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-91f4a36a"&gt;&lt;p class="cl-91f4941a"&gt;&lt;span class="cl-91f1a3f4"&gt;[-0.132,  0.044]&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+
++ Não há diferença nas proporções de doentes entre as classes das variáveis `Gender`, `AreaType` e `Age_less_16_years`.
+
+---
+
+# Tabelas de Contigência
+
++ Cálculo das razões de chance para verificar se há associação entre a ocorrência de doença e as variáveis binárias.
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-92099a4a{}.cl-920380ec{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(255, 255, 255, 1.00);background-color:transparent;}.cl-920380f6{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-9206072c{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-92061690{width:1.8in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9206169a{width:1.8in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9206169b{width:1.8in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-920616a4{width:1.8in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-92099a4a'&gt;&lt;caption style="display:table-caption;margin:0pt;text-align:center;border-bottom: 0.00pt solid transparent;border-top: 0.00pt solid transparent;border-left: 0.00pt solid transparent;border-right: 0.00pt solid transparent;padding-top:3pt;padding-bottom:3pt;padding-left:3pt;padding-right:3pt;line-height: 1;background-color:transparent;"&gt;&lt;span&gt;Razões de Chance de apresentar dengue&lt;/span&gt;&lt;/caption&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-92061690"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380ec"&gt;Variável&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-92061690"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380ec"&gt;Razão das chances de apresentar dengue&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-92061690"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380ec"&gt;Estimação pontual&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-92061690"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380ec"&gt;IC (95%)&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-9206169a"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;Gender&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-9206169a"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;Male/Female&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-9206169a"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;0.973&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-9206169a"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;[0.759, 1.248]&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-9206169b"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;AreaType&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-9206169b"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;Developed/Undeveloped&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-9206169b"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;0.851&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-9206169b"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;[0.664, 1.091]&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-920616a4"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;Age_less_16_years&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-920616a4"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;Yes/No&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-920616a4"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;1.190&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-920616a4"&gt;&lt;p class="cl-9206072c"&gt;&lt;span class="cl-920380f6"&gt;[0.834, 1.707]&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+
++ Não há diferença causada pelas classes entre as chances de ter dengue.
+
+---
+
+# Inferência para Tabelas de Contigência
+
++ Testes para variáveis ordinais a fim de avaliar a associação e possíveis tendências entre as variáveis ordinais `Ageless16years` e `AreaType`` em relação à ocorrência de dengue. Teste de Gama de Goodman e Kruskal, para medir a força e a direção da associação entre duas variáveis ordinais, e  o teste Tau-b que também avalia associação considerando empates. Teste de Cochran-Armitage para se existe tendência linear.
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-9218e680{}.cl-92127066{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(255, 255, 255, 1.00);background-color:transparent;}.cl-92127070{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-92150b50{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-92153148{width:3in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-92153152{width:2in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9215315c{width:1.5in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9215315d{width:3in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-92153166{width:2in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-92153167{width:1.5in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-92153168{width:3in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-92153170{width:2in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-92153171{width:1.5in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-9218e680'&gt;&lt;caption style="display:table-caption;margin:0pt;text-align:center;border-bottom: 0.00pt solid transparent;border-top: 0.00pt solid transparent;border-left: 0.00pt solid transparent;border-right: 0.00pt solid transparent;padding-top:3pt;padding-bottom:3pt;padding-left:3pt;padding-right:3pt;line-height: 1;background-color:transparent;"&gt;&lt;span&gt;Medidas de Associação para Variáveis Ordinais&lt;/span&gt;&lt;/caption&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-92153148"&gt;&lt;p class="cl-92150b50"&gt;&lt;span class="cl-92127066"&gt;Medidas / Variáveis&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-92153152"&gt;&lt;p class="cl-92150b50"&gt;&lt;span class="cl-92127066"&gt;Age_less_16_years&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-9215315c"&gt;&lt;p class="cl-92150b50"&gt;&lt;span class="cl-92127066"&gt;AreaType&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-9215315d"&gt;&lt;p class="cl-92150b50"&gt;&lt;span class="cl-92127070"&gt;Gama de Goodman e Kruskal&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-92153166"&gt;&lt;p class="cl-92150b50"&gt;&lt;span class="cl-92127070"&gt;0.0878&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-92153167"&gt;&lt;p class="cl-92150b50"&gt;&lt;span class="cl-92127070"&gt;-0.0805&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-92153168"&gt;&lt;p class="cl-92150b50"&gt;&lt;span class="cl-92127070"&gt;Tau-b&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-92153170"&gt;&lt;p class="cl-92150b50"&gt;&lt;span class="cl-92127070"&gt;0.0305&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-92153171"&gt;&lt;p class="cl-92150b50"&gt;&lt;span class="cl-92127070"&gt;-0.0402&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-9225e84e{}.cl-9220645a{font-family:'Arial';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(255, 255, 255, 1.00);background-color:transparent;}.cl-92206464{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-92228550{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-922295ea{width:3in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-922295f4{width:2in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-922295f5{width:1.5in;background-color:rgba(163, 96, 111, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-922295fe{width:3in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-922295ff{width:2in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-92229608{width:1.5in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-9225e84e'&gt;&lt;caption style="display:table-caption;margin:0pt;text-align:center;border-bottom: 0.00pt solid transparent;border-top: 0.00pt solid transparent;border-left: 0.00pt solid transparent;border-right: 0.00pt solid transparent;padding-top:3pt;padding-bottom:3pt;padding-left:3pt;padding-right:3pt;line-height: 1;background-color:transparent;"&gt;&lt;span&gt;P-valores do Teste de Cochran-Armitage&lt;/span&gt;&lt;/caption&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-922295ea"&gt;&lt;p class="cl-92228550"&gt;&lt;span class="cl-9220645a"&gt;P-valor / Variáveis&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-922295f4"&gt;&lt;p class="cl-92228550"&gt;&lt;span class="cl-9220645a"&gt;Age_less_16_years&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-922295f5"&gt;&lt;p class="cl-92228550"&gt;&lt;span class="cl-9220645a"&gt;AreaType&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-922295fe"&gt;&lt;p class="cl-92228550"&gt;&lt;span class="cl-92206464"&gt;p-valor&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-922295ff"&gt;&lt;p class="cl-92228550"&gt;&lt;span class="cl-92206464"&gt;0.3346&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-92229608"&gt;&lt;p class="cl-92228550"&gt;&lt;span class="cl-92206464"&gt;0.2034&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
++ As medidas de associação são fracas. 
+
++ Não há tendência linear.
+
+
+---
+
+# Associação: idade x ocorrência de dengue controlado pelo tipo de área
+
++ Teste de Breslow-Day: a fim de verificar se a associação entre o desfecho de dengue (`Outcome`) e idade (`Age_less_16_years`) é homogênea ao longo das categorias do tipo de área (`AreaType`); indicou homogeneidade das razões de chances entre os estratos (p-valor = 0,43).
+
++ Teste de Mantel-Haenszel: para estimar a associação ajustada entre ser menor de 16 anos e o desfecho de dengue, controlando pelo tipo de área de residência; não evidenciou associação significativa.
+
++ Paradoxo de Simpson: ausência de variação significativa nas razões de chances entre os estratos, evidenciada pelo teste de Breslow-Day, indica que não ocorre o paradoxo de Simpson neste caso — ou seja, o ajuste pelo tipo de área não alterou a direção ou a magnitude da associação entre idade e dengue.
+
++ Não há associação relevante entre ser menor de 16 anos e a ocorrência de dengue, independentemente do tipo de área onde o indivíduo reside.
+
+---
+
+# Associação: gênero x ocorrência de dengue controlado pela área
+
++ Teste de Breslow-Day: avaliar a associação entre gênero e desfecho de dengue estratificada pelas 36 áreas do estudo; indicou heterogeneidade significativa nas razões de chances entre os estratos (p = 0,02), ou seja, intensidade e/ou direção da associação entre gênero e ocorrência de dengue variam conforme a área de residência.
+
++ Teste de Mantel-Haenszel: para estimar a razão de chances comum ajustada pelo estrato, mas não evidenciou associação estatisticamente significativa entre gênero e dengue na amostra combinada com intervalo de confiança para a razão de chances (IC 95%: 0,74 a 1,23).
+
++ Paradoxo de Simpson: presença de heterogeneidade nas razões de chances, aliada à ausência de associação significativa no teste combinado, sugere a ocorrência do paradoxo de Simpson e classifica-se a área de residência como um fator de confusão para essa análise.
+
++ Teste Qui-quadrado: teste aplicado em cada uma das 36 áreas específicas mostraram que, em algumas áreas como Adabor (p = 0,017) e Sutrapur (p = 0,02), há associação estatisticamente significativa entre gênero e dengue, enquanto nas demais áreas a associação não foi significativa.
+
+---
+
+# Avaliação de Homogeneidade Marginal
+
++ Homogeneidade Marginal: avaliar se as distribuições do desfecho dengue são homogêneas entre diferentes grupos das variáveis área específica e gênero.
+
++ Homogeneidade Marginal para Área: teste qui-quadrado indicou rejeição da hipótese de homogeneidade (p-valor = 0,0015) para as áreas avaliadas - as distribuições do desfecho dengue variam significativamente entre as áreas.
+
++ Homogeneidade Marginal para Gênero: ao testar a homogeneidade entre gênero e desfecho, não houve evidência de diferença nas distribuições marginais (p = 0,88), indicando que a proporção de casos de dengue não difere de forma significativa entre os gêneros na amostra.
+
++ Conclusão: importância de considerar a área de residência como fator relevante que influencia a ocorrência do desfecho dengue.
+
+---
+
+# Modelagem: Regressão Logística
+
++ Regressão logística é uma utilizada para modelar a relação entre uma variável resposta dicotômica e as variáveis explicativas.
+
++ Quando as variáveis explicativas são categorizadas, elas são incluídas no modelo por meio de variáveis chamadas de *dummies*, permitindo avaliar o efeito de cada categoria em comparação a uma referência.
+
++ Esse modelo estima a chance do evento de interesse ocorrer a partir do logaritmo da razão de chance, o que possibilita interpretar o impacto de cada categoria na chance do desfecho.
+
++ Para a modelagem não foram utilizadas as variáveis IgG, IgM e NS1, visto que os testes explicam quase por completo o desfecho, fazendo com que não seja possível os coeficientes do modelo convergirem. Todas as outras variáveis foram utilizadas.
+
+---
+
+# Modelagem: Regressão Logística
+
++ Para selecionar se seria incluída a seleção de alguma interação entre variáveis no modelo, foi utilizado o método de seleção *stepwise*, que, de forma iterativa, avalia se a remoção ou adição de interações entre variáveis acarreta em uma diminuição do AIC.
+
++ Objetivo: encontrar um modelo mais simples e com bom ajuste, evitando o excesso de variáveis que não contribuem significativamente para o modelo.
+
++ O AIC é uma boa métrica para alcançar essa meta, já que penaliza a complexidade do modelo para evitar problemas de  *overfitting*, mas também considera se o modelo se ajusta bem aos dados, cumprindo então o princípio da parcimônia.
+
+---
+
+# Modelagem: Regressão Logística
+
+&lt;div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; overflow-x: scroll; width:100%; "&gt;&lt;table class="table table-striped table-hover table-condensed" style="font-size: 12px; color: black; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(163, 96, 111, 255) !important;position: sticky; top:0; background-color: #FFFFFF;"&gt; Id &lt;/th&gt;
+   &lt;th style="text-align:left;font-weight: bold;color: white !important;background-color: rgba(163, 96, 111, 255) !important;position: sticky; top:0; background-color: #FFFFFF;"&gt; Modelo &lt;/th&gt;
+   &lt;th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(163, 96, 111, 255) !important;position: sticky; top:0; background-color: #FFFFFF;"&gt; Desvio &lt;/th&gt;
+   &lt;th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(163, 96, 111, 255) !important;position: sticky; top:0; background-color: #FFFFFF;"&gt; Graus de liberdade &lt;/th&gt;
+   &lt;th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(163, 96, 111, 255) !important;position: sticky; top:0; background-color: #FFFFFF;"&gt; Razão de verossimilhança &lt;/th&gt;
+   &lt;th style="text-align:right;font-weight: bold;color: white !important;background-color: rgba(163, 96, 111, 255) !important;position: sticky; top:0; background-color: #FFFFFF;"&gt; AIC &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Independente &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1311.900 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 959 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1393.900 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adição de interação Gender:AreaType &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1311.529 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 958 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1395.529 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adição de interação Gender:Age_less_16_years &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1311.719 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 958 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.561 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1395.719 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adição de interação Age_less_16_years:AreaType &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1311.888 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 958 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.022 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1395.888 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adição de interação HouseType:Age_less_16_years &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1310.106 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 957 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.950 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1396.106 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adição de interação Gender:Housetype &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1311.384 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 957 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.059 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1397.384 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adição de interação HouseType:AreaType &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1311.582 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 957 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.079 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1397.582 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adição de interação Gender:Area &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1255.924 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 924 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 55.855 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1407.924 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adição de interação Area:Age_less_16_years &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1272.444 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 925 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -72.177 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1422.444 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adição de interação Area:AreaType &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1279.148 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 924 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.816 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1431.148 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adição de interação Area:HouseType &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1249.089 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 958 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36.762 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1471.089 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;&lt;/div&gt;
+
+---
+
+# Modelagem: Regressão Logística
+
++ Modelo independente: apresenta desvio de 1311,9, 959 graus de liberdade e um AIC de 1393,9.
+
++ Modelos 2 a 7: apresentam mudança no desvio bem pequena, indicando que a adição das interações não contribui significativamente para o modelo - o que é embasado também pelos resultados do teste de razão de verossimilhança.
+
++ Modelos 8 a 11: maior queda no desvio e valores maiores também para o teste de razão de verossimilhança. No entanto, os valores de AIC são maiores, indicando que o ganho no ajuste pode não compensar a complexidade do modelo.
+
++ Decisão: observando o menor valor de AIC, a melhor decisão nesse caso é não adicionar interações entre as variáveis e adotar o modelo independente.
+
+---
+
+# Interpretação do Modelo
+
++ A razão de chances para os gêneros masculino e feminino é bem próxima de 1, indicando que há pouca diferença na chance de contrair dengue entre homens e mulheres em Bangladesh;
+
++ Os intervalos de confiança para a razão de chances das variáveis referentes ao tipo de casa, tipo de área e idade todos contém 1, indicando também que bão podemos afirmar que há diferença na chance de ter dengue nos diferentes grupos;
+
++ Para a variável referente à área, a área de referência utilizada foi Adabor. Algumas áreas apresentaram diferença na chance de testar positivo para dengue ao observar o intervalo de confiança, como Banasree, Ramna e Sutrapur. No entanto, o restante não apontou diferença.
+
+---
+
+
+
+
+
+
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
